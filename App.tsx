@@ -1,6 +1,7 @@
 import React from 'react';
-import {NativeBaseProvider, Box} from 'native-base';
+
 import Layout from '@app/components/layout';
+import {Box, NativeBaseProvider} from 'native-base';
 
 export default function App() {
   return (
