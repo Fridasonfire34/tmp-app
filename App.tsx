@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {store} from '@app/redux/store';
-import Home from '@app/screens/home';
-import SignIn from '@app/screens/sign-in';
+import Home from '@app/screens/Home';
+import SignIn from '@app/screens/SignIn';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeBaseProvider} from 'native-base';
