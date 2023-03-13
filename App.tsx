@@ -39,7 +39,13 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute as string}>
             <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>
