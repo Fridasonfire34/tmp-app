@@ -38,10 +38,16 @@ export default function App() {
       <NativeBaseProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName={initialRoute as string}>
-            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen
               name="SignIn"
               component={SignIn}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={Home}
               options={{
                 headerShown: false,
               }}

@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 import Layout from '@app/components/layout';
-import {Box, Button, Input, Text} from 'native-base';
+import {API_BASE_URL} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import axios from 'axios';
+import {Box, Button, Input, Stack, Text, useToast} from 'native-base';
 import {Controller, useForm} from 'react-hook-form';
+import * as Keychain from 'react-native-keychain';
 
 type FormValues = {
   email: string;
@@ -11,10 +17,15 @@ type FormValues = {
 };
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const toast = useToast();
+
   const {
     handleSubmit,
     control,
-    formState: {errors},
+    formState: {errors, isValid},
   } = useForm({
     defaultValues: {
       email: '',
@@ -22,8 +33,34 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    setLoading(true);
+    if (isValid) {
+      try {
+        const response = await axios(`${API_BASE_URL}/mobile/auth/sign-in`, {
+          headers: {
+            email: data.email,
+            password: data.password,
+          },
+        });
+        await Keychain.setGenericPassword(data.email, data.password);
+        await AsyncStorage.setItem('@user', JSON.stringify(response.data));
+        toast.show({
+          title: 'Bienvenido',
+          description: 'Inicio de sesión exitoso',
+          backgroundColor: 'green.600',
+        });
+        navigation.navigate('Home');
+      } catch (error) {
+        toast.show({
+          title: 'Error',
+          description: 'El correo electrónico o la contraseña no son válidos',
+          backgroundColor: 'red.600',
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -41,6 +78,7 @@ export default function SignIn() {
               <Input
                 my={3}
                 placeholder="Correo electrónico"
+                autoCapitalize="none"
                 size="lg"
                 value={value}
                 onBlur={onBlur}
@@ -55,28 +93,30 @@ export default function SignIn() {
           {!!errors.email?.message && (
             <Text color="red.700">* {errors.email?.message}</Text>
           )}
-          <Controller
-            name="password"
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                my={3}
-                placeholder="Contraseña"
-                type="password"
-                size="lg"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={v => onChange(v)}
-              />
-            )}
-            rules={{
-              required: 'La contraseña es requerida',
-            }}
-          />
+          <Stack direction="row" alignItems="center">
+            <Controller
+              name="password"
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  my={3}
+                  placeholder="Contraseña"
+                  type="password"
+                  size="lg"
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={v => onChange(v)}
+                />
+              )}
+              rules={{
+                required: 'La contraseña es requerida',
+              }}
+            />
+          </Stack>
           {!!errors.email?.message && (
             <Text color="red.700">* {errors.password?.message}</Text>
           )}
-          <Button my={3} onPress={handleSubmit(onSubmit)}>
+          <Button my={3} isLoading={loading} onPress={handleSubmit(onSubmit)}>
             Inicio de sesión
           </Button>
         </Box>

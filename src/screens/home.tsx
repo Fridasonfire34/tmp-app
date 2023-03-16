@@ -1,30 +1,32 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import Layout from '@app/components/layout';
-import {fetchUser} from '@app/redux/slices/signInSlice';
-import {useAppDispatch, useAppSelector} from '@app/redux/store';
-import {Box} from 'native-base';
+import {useAppSelector} from '@app/redux/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {Box, Button} from 'native-base';
+import * as Keychain from 'react-native-keychain';
 
 export default function Home() {
-  const dispatch = useAppDispatch();
-  const {user, error, loading} = useAppSelector(state => state.signIn);
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  useEffect(() => {
-    dispatch(
-      fetchUser({
-        email: 'admin@tmp.com',
-        password: 'M0nd4y$44',
-      }),
-    );
-  }, [dispatch]);
+  const {user, error, loading} = useAppSelector(state => state.signIn);
 
   console.log('user', user);
   console.log('error', error);
   console.log('loading', loading);
 
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('@user');
+    await Keychain.resetGenericPassword();
+    navigation.navigate('SignIn');
+  };
+
   return (
     <Layout>
       <Box>Hello world</Box>
+      <Button onPress={handleLogout}>Cerrar sesión</Button>
     </Layout>
   );
 }
