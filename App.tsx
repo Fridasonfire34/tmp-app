@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
 
+import Loading from '@app/components/loading';
 import {store} from '@app/redux/store';
 import Home from '@app/screens/Home';
+import Search from '@app/screens/Search';
 import SignIn from '@app/screens/SignIn';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -18,7 +19,6 @@ export default function App() {
   useEffect(() => {
     const veryfiKey = async () => {
       const credentials = await Keychain.getGenericPassword();
-      console.log('credentials', credentials);
       if (credentials) {
         setInitialRoute('Home');
       } else {
@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   if (!initialRoute) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   return (
@@ -50,6 +50,13 @@ export default function App() {
               component={Home}
               options={{
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Search"
+              component={Search}
+              options={{
+                headerTitle: '',
               }}
             />
           </Stack.Navigator>
