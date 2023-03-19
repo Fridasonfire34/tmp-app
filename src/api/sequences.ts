@@ -45,4 +45,27 @@ const postRemoveSequence = async (id: string) => {
   }
 };
 
-export {getSequences, postRemoveSequence};
+const postCreateReport = async (id: string) => {
+  try {
+    const store = await AsyncStorage.getItem('@user');
+    const user = JSON.parse(store as any).stack;
+    const response = await axios.post(
+      `${API_BASE_URL}/mobile/sequences/report`,
+      {
+        packingId: Number(id),
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          id: user.id,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export {getSequences, postRemoveSequence, postCreateReport};

@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Loading from '@app/components/loading';
 import {store} from '@app/redux/store';
 import Home from '@app/screens/Home';
+import Report from '@app/screens/Report';
 import Search from '@app/screens/Search';
 import SignIn from '@app/screens/SignIn';
 import {NavigationContainer} from '@react-navigation/native';
@@ -55,6 +56,13 @@ export default function App() {
             <Stack.Screen
               name="Search"
               component={Search}
+              options={{
+                headerTitle: '',
+              }}
+            />
+            <Stack.Screen
+              name="Report"
+              component={Report}
               options={{
                 headerTitle: '',
               }}

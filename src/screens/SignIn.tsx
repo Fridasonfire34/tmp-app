@@ -78,6 +78,7 @@ export default function SignIn() {
               <Input
                 my={3}
                 placeholder="Correo electrónico"
+                keyboardType="email-address"
                 autoCapitalize="none"
                 size="lg"
                 value={value}

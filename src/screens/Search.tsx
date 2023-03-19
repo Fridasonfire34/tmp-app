@@ -1,23 +1,56 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, RefreshControl, StyleSheet} from 'react-native';
 
-import {getSequences, postRemoveSequence} from '@app/api/sequences';
+import {
+  getSequences,
+  postCreateReport,
+  postRemoveSequence,
+} from '@app/api/sequences';
 import Layout from '@app/components/layout';
 import {sumRestParts} from '@app/utils/sequences';
-import {useRoute} from '@react-navigation/native';
-import {Box, Button, Input, Stack, Text, View} from 'native-base';
+import {ParamListBase, useNavigation, useRoute} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {AlertDialog, Box, Button, Input, Stack, Text, View} from 'native-base';
 import {SkypeIndicator} from 'react-native-indicators';
 
 export default function Search() {
+  const cancelDialogRef = useRef(null);
+
   const [data, setData] = useState<any>([]);
   const [filteredData, setFilteredData] = useState<any>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [numberRestPackings, setNumberRestPackings] = useState<number>(0);
   const [numberPart, setNumberPart] = useState<string>('');
+  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
 
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const route = useRoute();
   const {packing}: any = route.params;
+
+  const handleCreateReport = () => {
+    setIsOpenDialog(false);
+    setLoading(true);
+    postCreateReport(packing)
+      .then(res => {
+        const {stack} = res;
+        navigation.push('Report', {source: stack});
+      })
+      .catch(() => {
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleConfirmCreateReport = () => {
+    setIsOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsOpenDialog(false);
+  };
 
   const handleRemove = (id: string) => {
     setLoading(true);
@@ -182,7 +215,10 @@ export default function Search() {
                 </View>
               )}
               ListFooterComponent={
-                <Button mt={5} isDisabled={loading || error || !data.length}>
+                <Button
+                  mt={5}
+                  isDisabled={loading || error || !data.length}
+                  onPress={handleConfirmCreateReport}>
                   Generar reporte
                 </Button>
               }
@@ -195,6 +231,32 @@ export default function Search() {
           )}
         </Box>
       )}
+      <AlertDialog
+        leastDestructiveRef={cancelDialogRef}
+        isOpen={isOpenDialog}
+        onClose={handleCloseDialog}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Mensaje</AlertDialog.Header>
+          <AlertDialog.Body>
+            ¿Está seguro que desea crear un reporte?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={handleCloseDialog}
+                ref={cancelDialogRef}>
+                Cancelar
+              </Button>
+              <Button colorScheme="cyan" onPress={handleCreateReport}>
+                Confirmar
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </Layout>
   );
 }
