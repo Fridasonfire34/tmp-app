@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Platform, StyleSheet} from 'react-native';
+import {Button, Dimensions, Platform, StyleSheet} from 'react-native';
 
 import {useRoute} from '@react-navigation/native';
-import {Box} from 'native-base';
+import {Box, Stack, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
 import Pdf from 'react-native-pdf';
 
 export default function Report() {
@@ -10,6 +11,36 @@ export default function Report() {
 
   const route = useRoute();
   const {source}: any = route.params;
+
+  const toast = useToast();
+
+  const handleShare = async () => {
+    try {
+      const src = RNFetchBlob.fs.dirs.DownloadDir + `/report-${Date.now()}.pdf`;
+      RNFetchBlob.fs
+        .writeFile(src, source, 'base64')
+        .then(() => {
+          if (Platform.OS === 'ios') {
+            RNFetchBlob.ios.openDocument(src);
+          } else {
+            RNFetchBlob.android.actionViewIntent(src, 'application/pdf');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          toast.show({
+            title: 'Error',
+            description: 'No se pudo compartir el reporte' + err,
+          });
+        });
+    } catch (e) {
+      console.log(e);
+      toast.show({
+        title: 'Error',
+        description: 'No se pudo compartir el reporte',
+      });
+    }
+  };
 
   useEffect(() => {
     if (source) {
@@ -23,6 +54,9 @@ export default function Report() {
 
   return (
     <Box style={styles.container}>
+      <Stack justifyContent="flex-end">
+        <Button onPress={handleShare} title="Compartir" />
+      </Stack>
       <Pdf
         source={{
           uri: uri,
