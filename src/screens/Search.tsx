@@ -66,12 +66,29 @@ export default function Search() {
       });
   };
 
+  const handleRemoveFilter = () => {
+    setLoading(true);
+    const id = filteredData.find((f: any) => f.partNumber === numberPart)
+      .parts[0].id;
+    postRemoveSequence(id)
+      .then(() => {
+        fetchData();
+      })
+      .catch(() => {
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const handleChangeSearch = (value: string) => {
-    setNumberPart(value);
-    if (value.length) {
+    const fortmatValue = value.trim();
+    setNumberPart(fortmatValue);
+    if (fortmatValue.length) {
       const filtered = data.filter((item: any) => {
         return item.parts.find((part: any) => {
-          return part.partNumber.includes(value);
+          return part.partNumber.includes(fortmatValue);
         });
       });
       setFilteredData(filtered);
@@ -136,10 +153,11 @@ export default function Search() {
             placeholder="Ingrese el número de parte"
             autoCapitalize="none"
             size="lg"
-            returnKeyType="search"
+            returnKeyType="send"
             isDisabled={loading || error || !data.length}
             value={numberPart}
             onChangeText={handleChangeSearch}
+            onSubmitEditing={() => handleRemoveFilter()}
           />
           {loading && (
             <Box style={styles.container}>
@@ -150,87 +168,96 @@ export default function Search() {
             </Box>
           )}
           {!loading && (
-            <FlatList
-              data={filteredData}
-              keyExtractor={item => item.id}
-              refreshControl={
-                <RefreshControl refreshing={loading} onRefresh={fetchData} />
-              }
-              renderItem={({item}) => (
-                <View>
-                  {item?.parts.map((part: any, index: number) => {
-                    return (
-                      <Stack
-                        key={index}
-                        direction="row"
-                        justifyContent="space-between"
-                        alignContent="center"
-                        alignItems="center"
-                        my={2}>
-                        <Box>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              ID
-                            </Text>
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              {part.id}
-                            </Text>
-                          </Stack>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              Packing Disk No.
-                            </Text>
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              {part.packingDiskNo}
-                            </Text>
-                          </Stack>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              Part No.
-                            </Text>
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              {part.partNumber}
-                            </Text>
-                          </Stack>
-                          <Stack direction="row" justifyContent="space-between">
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              Quantity
-                            </Text>
-                            <Text fontSize="sm" my={2} fontWeight="500">
-                              {part.quantity}
-                            </Text>
-                          </Stack>
-                        </Box>
-                        <Button
-                          bgColor="red.500"
-                          width={10}
-                          height={10}
-                          borderRadius={20}
-                          onPress={() => handleRemove(item.id)}>
-                          X
-                        </Button>
-                      </Stack>
-                    );
-                  })}
-                </View>
-              )}
-              ListFooterComponent={
-                <Button
-                  mt={5}
-                  isDisabled={loading || error || !data.length}
-                  onPress={handleConfirmCreateReport}>
-                  Generar reporte
-                </Button>
-              }
-              ListEmptyComponent={
-                <Text fontSize="sm" my={2} fontWeight="500">
-                  No se encontraron resultados
-                </Text>
-              }
-            />
+            <>
+              <FlatList
+                data={filteredData}
+                keyExtractor={item => item.id}
+                refreshControl={
+                  <RefreshControl refreshing={loading} onRefresh={fetchData} />
+                }
+                renderItem={({item}) => (
+                  <View>
+                    {item?.parts.map((part: any, index: number) => {
+                      return (
+                        <Stack
+                          key={index}
+                          direction="row"
+                          justifyContent="space-between"
+                          alignContent="center"
+                          alignItems="center"
+                          my={2}>
+                          <Box>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between">
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                ID
+                              </Text>
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                {part.id}
+                              </Text>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between">
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                Packing Disk No.
+                              </Text>
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                {part.packingDiskNo}
+                              </Text>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between">
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                Part No.
+                              </Text>
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                {part.partNumber}
+                              </Text>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between">
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                Quantity
+                              </Text>
+                              <Text fontSize="sm" my={2} fontWeight="500">
+                                {part.quantity}
+                              </Text>
+                            </Stack>
+                          </Box>
+                          <Button
+                            bgColor="red.500"
+                            width={10}
+                            height={10}
+                            borderRadius={20}
+                            onPress={() => handleRemove(item.id)}>
+                            X
+                          </Button>
+                        </Stack>
+                      );
+                    })}
+                  </View>
+                )}
+                ListEmptyComponent={
+                  <Text fontSize="sm" my={2} fontWeight="500">
+                    No se encontraron resultados
+                  </Text>
+                }
+              />
+              <Button
+                mt={5}
+                isDisabled={loading || error || !data.length}
+                onPress={handleConfirmCreateReport}>
+                Generar reporte
+              </Button>
+            </>
           )}
         </Box>
       )}
+
       <AlertDialog
         leastDestructiveRef={cancelDialogRef}
         isOpen={isOpenDialog}

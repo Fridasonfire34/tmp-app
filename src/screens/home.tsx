@@ -50,7 +50,7 @@ export default function Home() {
   useEffect(() => {
     const getUser = async () => {
       const store: any = await AsyncStorage.getItem('@user');
-      setUser(JSON.parse(store).stack);
+      setUser(JSON.parse(store)?.stack);
     };
     getUser();
   }, []);
@@ -82,7 +82,7 @@ export default function Home() {
                 size="lg"
                 value={value}
                 onBlur={onBlur}
-                onChangeText={v => onChange(v)}
+                onChangeText={v => onChange(v.trim())}
               />
             )}
             rules={{
