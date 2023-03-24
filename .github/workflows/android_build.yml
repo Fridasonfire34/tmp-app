@@ -1,0 +1,37 @@
+name: Build, code quality, tests
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN  }}  
+  APP_NAME: ${{ 'TMP-ORG/TMP'  }}  
+  TESTING_GROUP: ${{  'Collaborators'  }} 
+  UPLOAD_FILE: ${{ 'android/app/build/outputs/apk/release/app-release.apk'  }}  
+
+jobs:
+  build:
+    name: Start Build ⚒️
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: SetUp JDK 11 ⚙️
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Install dependencies 🔗
+      run: yarn install
+    - name: Build android ⚒️
+      run: cd android && ./gradlew assembleRelease
+    - name: Upload artefact to App Center 🚀
+      uses: wzieba/AppCenter-Github-Action@v1
+      with:
+        appName: ${{ env.APP_NAME }}
+        token: ${{ env.APP_CENTER_TOKEN }}
+        group: ${{ env.TESTING_GROUP }}
+        file: ${{ env.UPLOAD_FILE }}
+        notifyTesters: true
+        debug: false
