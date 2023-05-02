@@ -14,6 +14,15 @@
 		776E08F25D3EA3E221D331AA /* libPods-tmpappmobile-tmpappmobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F021C7AF410014C836AF62 /* libPods-tmpappmobile-tmpappmobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		84440140E7DAAFF9D26C74BF /* libPods-tmpappmobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE5203638668923274AA781F /* libPods-tmpappmobile.a */; };
+		81CD88B5CE4C401E9FB2FD1C /* Fahkwang-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E099143F51F4715BDEA074A /* Fahkwang-Medium.ttf */; };
+		9504AA967A2A4FF9931EB24F /* Fahkwang-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 36BA12F73D2449CE8CA11B09 /* Fahkwang-Regular.ttf */; };
+		97E5997410524F7FB04CCE1E /* Gayathri-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D33A3E89D68246D792294268 /* Gayathri-Bold.ttf */; };
+		4E15797AD7954329AFAF6B6B /* Gayathri-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F24F15ADD5244094A2D4664B /* Gayathri-Regular.ttf */; };
+		FDB56ECB809D4F34AD466E5C /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C0D21461847545E98C40ECCF /* Montserrat-SemiBold.ttf */; };
+		7E33BDFDFAA2441D93D36596 /* PlusJakartaSans-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 535C8EFEA348457DB24A9F6F /* PlusJakartaSans-VariableFont_wght.ttf */; };
+		EC07628E22034B72AA8FE763 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DF4C6A3551544ECB9EE1F14 /* Poppins-ExtraLight.ttf */; };
+		7244E46959BE4D3B981EC3EF /* Questrial-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA3AA937DADE4250B667A792 /* Questrial-Regular.ttf */; };
+		43B2E8054E1B4187985A92E1 /* Raleway-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D357241C76544568A7B3990F /* Raleway-VariableFont_wght.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +53,15 @@
 		C9F021C7AF410014C836AF62 /* libPods-tmpappmobile-tmpappmobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tmpappmobile-tmpappmobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EE5203638668923274AA781F /* libPods-tmpappmobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tmpappmobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E099143F51F4715BDEA074A /* Fahkwang-Medium.ttf */ = {isa = PBXFileReference; name = "Fahkwang-Medium.ttf"; path = "../assets/fonts/Fahkwang-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		36BA12F73D2449CE8CA11B09 /* Fahkwang-Regular.ttf */ = {isa = PBXFileReference; name = "Fahkwang-Regular.ttf"; path = "../assets/fonts/Fahkwang-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D33A3E89D68246D792294268 /* Gayathri-Bold.ttf */ = {isa = PBXFileReference; name = "Gayathri-Bold.ttf"; path = "../assets/fonts/Gayathri-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F24F15ADD5244094A2D4664B /* Gayathri-Regular.ttf */ = {isa = PBXFileReference; name = "Gayathri-Regular.ttf"; path = "../assets/fonts/Gayathri-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C0D21461847545E98C40ECCF /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; name = "Montserrat-SemiBold.ttf"; path = "../assets/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		535C8EFEA348457DB24A9F6F /* PlusJakartaSans-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "PlusJakartaSans-VariableFont_wght.ttf"; path = "../assets/fonts/PlusJakartaSans-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2DF4C6A3551544ECB9EE1F14 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraLight.ttf"; path = "../assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BA3AA937DADE4250B667A792 /* Questrial-Regular.ttf */ = {isa = PBXFileReference; name = "Questrial-Regular.ttf"; path = "../assets/fonts/Questrial-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D357241C76544568A7B3990F /* Raleway-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Raleway-VariableFont_wght.ttf"; path = "../assets/fonts/Raleway-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +140,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				087D780BBD494E7091493AA4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +166,23 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		087D780BBD494E7091493AA4 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				2E099143F51F4715BDEA074A /* Fahkwang-Medium.ttf */,
+				36BA12F73D2449CE8CA11B09 /* Fahkwang-Regular.ttf */,
+				D33A3E89D68246D792294268 /* Gayathri-Bold.ttf */,
+				F24F15ADD5244094A2D4664B /* Gayathri-Regular.ttf */,
+				C0D21461847545E98C40ECCF /* Montserrat-SemiBold.ttf */,
+				535C8EFEA348457DB24A9F6F /* PlusJakartaSans-VariableFont_wght.ttf */,
+				2DF4C6A3551544ECB9EE1F14 /* Poppins-ExtraLight.ttf */,
+				BA3AA937DADE4250B667A792 /* Questrial-Regular.ttf */,
+				D357241C76544568A7B3990F /* Raleway-VariableFont_wght.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +280,15 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				81CD88B5CE4C401E9FB2FD1C /* Fahkwang-Medium.ttf in Resources */,
+				9504AA967A2A4FF9931EB24F /* Fahkwang-Regular.ttf in Resources */,
+				97E5997410524F7FB04CCE1E /* Gayathri-Bold.ttf in Resources */,
+				4E15797AD7954329AFAF6B6B /* Gayathri-Regular.ttf in Resources */,
+				FDB56ECB809D4F34AD466E5C /* Montserrat-SemiBold.ttf in Resources */,
+				7E33BDFDFAA2441D93D36596 /* PlusJakartaSans-VariableFont_wght.ttf in Resources */,
+				EC07628E22034B72AA8FE763 /* Poppins-ExtraLight.ttf in Resources */,
+				7244E46959BE4D3B981EC3EF /* Questrial-Regular.ttf in Resources */,
+				43B2E8054E1B4187985A92E1 /* Raleway-VariableFont_wght.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
