@@ -13,7 +13,7 @@ type FormValues = {
   packingDiskNo: string;
 };
 
-export default function Home() {
+export default function Main() {
   const [user, setUser] = useState<any>();
   const [isOpen, setIsOpen] = useState(false);
   const cancelRef = useRef(null);

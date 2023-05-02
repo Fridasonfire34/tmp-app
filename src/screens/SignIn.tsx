@@ -12,7 +12,7 @@ import {Controller, useForm} from 'react-hook-form';
 import * as Keychain from 'react-native-keychain';
 
 type FormValues = {
-  email: string;
+  employeeNumber: string;
   password: string;
 };
 
@@ -28,7 +28,7 @@ export default function SignIn() {
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
-      email: '',
+      employeeNumber: '',
       password: '',
     },
   });
@@ -39,22 +39,22 @@ export default function SignIn() {
       try {
         const response = await axios(`${API_BASE_URL}/mobile/auth/sign-in`, {
           headers: {
-            email: data.email,
+            employee: data.employeeNumber,
             password: data.password,
           },
         });
-        await Keychain.setGenericPassword(data.email, data.password);
+        await Keychain.setGenericPassword(data.employeeNumber, data.password);
         await AsyncStorage.setItem('@user', JSON.stringify(response.data));
         toast.show({
           title: 'Bienvenido',
           description: 'Inicio de sesión exitoso',
           backgroundColor: 'green.600',
         });
-        navigation.navigate('Home');
+        navigation.navigate('Main');
       } catch (error) {
         toast.show({
           title: 'Error',
-          description: 'El correo electrónico o la contraseña no son válidos',
+          description: 'El número de empleado o la contraseña no son válidos',
           backgroundColor: 'red.600',
         });
       } finally {
@@ -72,13 +72,13 @@ export default function SignIn() {
         <Text fontSize="md">Inicio de sesión</Text>
         <Box style={styles.form}>
           <Controller
-            name="email"
+            name="employeeNumber"
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 my={3}
-                placeholder="Correo electrónico"
-                keyboardType="email-address"
+                placeholder="Número de empleado"
+                keyboardType="default"
                 autoCapitalize="none"
                 size="lg"
                 value={value}
@@ -87,12 +87,11 @@ export default function SignIn() {
               />
             )}
             rules={{
-              required: 'El correo electrónico es requerido',
-              pattern: /^\S+@\S+$/i,
+              required: 'El número de empleado es requerido',
             }}
           />
-          {!!errors.email?.message && (
-            <Text color="red.700">* {errors.email?.message}</Text>
+          {!!errors.employeeNumber?.message && (
+            <Text color="red.700">* {errors.employeeNumber?.message}</Text>
           )}
           <Stack direction="row" alignItems="center">
             <Controller
@@ -114,7 +113,7 @@ export default function SignIn() {
               }}
             />
           </Stack>
-          {!!errors.email?.message && (
+          {!!errors.employeeNumber?.message && (
             <Text color="red.700">* {errors.password?.message}</Text>
           )}
           <Button my={3} isLoading={loading} onPress={handleSubmit(onSubmit)}>

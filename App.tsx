@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import Loading from '@app/components/loading';
 import {store} from '@app/redux/store';
-import Home from '@app/screens/Home';
+import Main from '@app/screens/Main';
 import Report from '@app/screens/Report';
 import Search from '@app/screens/Search';
 import SignIn from '@app/screens/SignIn';
@@ -21,7 +21,7 @@ export default function App() {
     const veryfiKey = async () => {
       const credentials = await Keychain.getGenericPassword();
       if (credentials) {
-        setInitialRoute('Home');
+        setInitialRoute('Main');
       } else {
         await Keychain.resetGenericPassword();
         setInitialRoute('SignIn');
@@ -47,8 +47,8 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="Home"
-              component={Home}
+              name="Main"
+              component={Main}
               options={{
                 headerShown: false,
               }}
