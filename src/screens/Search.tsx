@@ -34,6 +34,8 @@ export default function Search() {
     postCreateReport(packing)
       .then(res => {
         const {stack} = res;
+        setNumberPart('');
+        setNumberRestPackings(0);
         navigation.push('Report', {source: stack});
       })
       .catch(() => {
@@ -147,9 +149,9 @@ export default function Search() {
           </Stack>
           <Input
             my={3}
+            size="lg"
             placeholder="Ingrese el número de parte"
             autoCapitalize="none"
-            size="lg"
             returnKeyType="send"
             isDisabled={loading || error || !data.length}
             value={numberPart}
