@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'package.json' # only release when version changes
+  workflow_dispatch: # allow manual triggering of action
 
 env:
   APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN  }}
