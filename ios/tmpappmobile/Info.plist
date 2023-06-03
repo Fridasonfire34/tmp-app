@@ -52,16 +52,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>UIAppFonts</key>
-	<array>
-		<string>Fahkwang-Medium.ttf</string>
-		<string>Fahkwang-Regular.ttf</string>
-		<string>Gayathri-Bold.ttf</string>
-		<string>Gayathri-Regular.ttf</string>
-		<string>Montserrat-SemiBold.ttf</string>
-		<string>PlusJakartaSans-VariableFont_wght.ttf</string>
-		<string>Poppins-ExtraLight.ttf</string>
-		<string>Questrial-Regular.ttf</string>
-		<string>Raleway-VariableFont_wght.ttf</string>
-	</array>
+	<array/>
 </dict>
 </plist>

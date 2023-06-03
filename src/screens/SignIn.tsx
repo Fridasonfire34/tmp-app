@@ -67,21 +67,13 @@ export default function SignIn() {
   return (
     <Layout>
       <Box style={styles.container}>
-        <Text
-          fontSize={'30'}
-          fontFamily={'Gayathri-Bold'}
-          textAlign={'center'}
-          my={2}>
+        <Text fontSize={'30'} textAlign={'center'} my={2}>
           TMP Picking System
         </Text>
         <View style={styles.viewImage}>
           <Image source={itop} style={styles.topimage} alt="login image" />
         </View>
-        <Text
-          marginY={5}
-          fontSize={'25'}
-          fontFamily={'Gayathri-Bold'}
-          textAlign={'center'}>
+        <Text marginY={5} fontSize={'25'} textAlign={'center'}>
           Inicio de sesión
         </Text>
         <Box style={styles.viewInputs}>
