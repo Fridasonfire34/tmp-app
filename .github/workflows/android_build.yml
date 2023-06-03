@@ -9,8 +9,8 @@ on:
   workflow_dispatch: # allow manual triggering of action
 
 env:
-  APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN  }}
-  APP_NAME: ${{ 'TMP-ORG/TMP'  }}
+  APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN_TMP  }}
+  APP_NAME: ${{ 'TMP-PICKING/TMP'  }}
   TESTING_GROUP: ${{  'Collaborators'  }}
   UPLOAD_FILE: ${{ 'android/app/build/outputs/apk/release/app-release.apk'  }}
 
