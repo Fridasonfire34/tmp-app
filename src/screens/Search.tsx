@@ -34,6 +34,8 @@ export default function Search() {
     postCreateReport(packing)
       .then(res => {
         const {stack} = res;
+        setNumberPart('');
+        setNumberRestPackings(0);
         navigation.push('Report', {source: stack});
       })
       .catch(() => {
@@ -137,22 +139,19 @@ export default function Search() {
       )}
       {!error && data && (
         <Box style={styles.content}>
-          <Text fontSize="2xl" my={2}>
-            Resultados de la búsqueda
-          </Text>
           <Stack direction="row" justifyContent="space-between">
             <Text fontSize="sm" my={2} fontWeight="500">
               Packing: {packing}
             </Text>
             <Text fontSize="sm" my={2} fontWeight="500">
-              Partes restantes: {numberRestPackings}
+              Piezas restantes: {numberRestPackings}
             </Text>
           </Stack>
           <Input
             my={3}
+            size="lg"
             placeholder="Ingrese el número de parte"
             autoCapitalize="none"
-            size="lg"
             returnKeyType="send"
             isDisabled={loading || error || !data.length}
             value={numberPart}
@@ -191,40 +190,7 @@ export default function Search() {
                               direction="row"
                               justifyContent="space-between">
                               <Text fontSize="sm" my={2} fontWeight="500">
-                                ID
-                              </Text>
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                {part.id}
-                              </Text>
-                            </Stack>
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between">
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                Packing Disk No.
-                              </Text>
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                {part.packingDiskNo}
-                              </Text>
-                            </Stack>
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between">
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                Part No.
-                              </Text>
-                              <Text fontSize="sm" my={2} fontWeight="500">
                                 {part.partNumber}
-                              </Text>
-                            </Stack>
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between">
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                Quantity
-                              </Text>
-                              <Text fontSize="sm" my={2} fontWeight="500">
-                                {part.quantity}
                               </Text>
                             </Stack>
                           </Box>
@@ -266,7 +232,7 @@ export default function Search() {
           <AlertDialog.CloseButton />
           <AlertDialog.Header>Mensaje</AlertDialog.Header>
           <AlertDialog.Body>
-            ¿Está seguro que desea crear un reporte?
+            ¿Está seguro de generar reporte para este Packing?
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button.Group space={2}>
@@ -310,7 +276,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   text: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: '500',
     marginTop: 15,
   },

@@ -1,13 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 import Layout from '@app/components/layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {AlertDialog, Box, Button, Input, Stack, Text} from 'native-base';
+import {Box, Button, Input, Stack, Text} from 'native-base';
 import {Controller, useForm} from 'react-hook-form';
-import * as Keychain from 'react-native-keychain';
 
 type FormValues = {
   packingDiskNo: string;
@@ -15,8 +14,6 @@ type FormValues = {
 
 export default function Main() {
   const [user, setUser] = useState<any>();
-  const [isOpen, setIsOpen] = useState(false);
-  const cancelRef = useRef(null);
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -30,15 +27,6 @@ export default function Main() {
       packingDiskNo: '',
     },
   });
-
-  const onClose = () => setIsOpen(false);
-
-  const handleLogout = async () => {
-    onClose();
-    await AsyncStorage.removeItem('@user');
-    await Keychain.resetGenericPassword();
-    navigation.navigate('SignIn');
-  };
 
   const onSubmit = async (data: FormValues) => {
     if (isValid) {
@@ -58,17 +46,14 @@ export default function Main() {
   return (
     <Layout>
       <Box style={styles.container}>
-        <Text fontSize="2xl" my={2}>
-          TMP | Inicio
+        <Text fontSize="30" my={2} style={{textAlign: 'center'}}>
+          TMP | Picking System
         </Text>
         <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center">
-          <Text fontSize="md">Bienvenido {user?.name}</Text>
-          <Button variant="ghost" onPress={() => setIsOpen(true)}>
-            Cerrar sesión
-          </Button>
+          <Text fontSize="md">Entraste como: {user?.name}</Text>
         </Stack>
         <Box style={styles.form}>
           <Controller
@@ -76,11 +61,13 @@ export default function Main() {
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
+                autoFocus={true}
                 my={3}
                 placeholder="Packing Disk No"
                 autoCapitalize="none"
                 size="lg"
                 value={value}
+                onSubmitEditing={handleSubmit(onSubmit)}
                 onBlur={onBlur}
                 onChangeText={v => onChange(v.trim())}
               />
@@ -96,37 +83,14 @@ export default function Main() {
           {!!errors.packingDiskNo?.message && (
             <Text color="red.700">* {errors.packingDiskNo?.message}</Text>
           )}
-          <Button my={3} onPress={handleSubmit(onSubmit)}>
+          <Button
+            my={3}
+            onPress={handleSubmit(onSubmit)}
+            background="darkBlue.600">
             Buscar
           </Button>
         </Box>
       </Box>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}>
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>Mensaje</AlertDialog.Header>
-          <AlertDialog.Body>
-            ¿Está seguro que desea cerrar sesión?
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="unstyled"
-                colorScheme="coolGray"
-                onPress={onClose}
-                ref={cancelRef}>
-                Cancelar
-              </Button>
-              <Button colorScheme="blue" onPress={handleLogout}>
-                Cerrar sesión
-              </Button>
-            </Button.Group>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
     </Layout>
   );
 }

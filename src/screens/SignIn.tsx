@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 
 import Layout from '@app/components/layout';
 import {API_BASE_URL} from '@env';
@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
-import {Box, Button, Input, Stack, Text, useToast} from 'native-base';
+import {Box, Button, Image, Input, Stack, Text, useToast} from 'native-base';
 import {Controller, useForm} from 'react-hook-form';
 import * as Keychain from 'react-native-keychain';
 
@@ -18,7 +18,8 @@ type FormValues = {
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
-
+  const itop = require('./loginicon2.png');
+  const passwordRef = useRef<TextInput>(null);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const toast = useToast();
 
@@ -66,28 +67,35 @@ export default function SignIn() {
   return (
     <Layout>
       <Box style={styles.container}>
-        <Text fontSize="2xl" my={2}>
-          TMP | Bienvenido
+        <Text fontSize={'30'} textAlign={'center'} my={2}>
+          TMP Picking System
         </Text>
-        <Text fontSize="md">Inicio de sesión</Text>
-        <Box style={styles.form}>
+        <View style={styles.viewImage}>
+          <Image source={itop} style={styles.topimage} alt="login image" />
+        </View>
+        <Text marginY={5} fontSize={'25'} textAlign={'center'}>
+          Inicio de sesión
+        </Text>
+        <Box style={styles.viewInputs}>
           <Controller
             name="employeeNumber"
             control={control}
-            render={({field: {onChange, onBlur, value}}) => (
+            render={({field: {onChange, value}}) => (
               <Input
                 my={3}
+                size="lg"
+                autoFocus={true}
                 placeholder="Número de empleado"
                 keyboardType="default"
                 autoCapitalize="none"
-                size="lg"
                 value={value}
-                onBlur={onBlur}
+                blurOnSubmit={false}
+                onSubmitEditing={() => passwordRef?.current?.focus()}
                 onChangeText={v => onChange(v)}
               />
             )}
             rules={{
-              required: 'El número de empleado es requerido',
+              required: 'Por favor ingresa un número de empleado valido',
             }}
           />
           {!!errors.employeeNumber?.message && (
@@ -99,25 +107,32 @@ export default function SignIn() {
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
                 <Input
-                  my={3}
-                  placeholder="Contraseña"
                   type="password"
                   size="lg"
+                  my={3}
+                  ref={passwordRef}
+                  placeholder="Contraseña"
+                  secureTextEntry
                   value={value}
+                  onSubmitEditing={handleSubmit(onSubmit)}
                   onBlur={onBlur}
                   onChangeText={v => onChange(v)}
                 />
               )}
               rules={{
-                required: 'La contraseña es requerida',
+                required: 'Por favor ingresa una contraseña valida',
               }}
             />
           </Stack>
           {!!errors.employeeNumber?.message && (
             <Text color="red.700">* {errors.password?.message}</Text>
           )}
-          <Button my={3} isLoading={loading} onPress={handleSubmit(onSubmit)}>
-            Inicio de sesión
+          <Button
+            background="darkBlue.600"
+            my={3}
+            isLoading={loading}
+            onPress={handleSubmit(onSubmit)}>
+            Entrar
           </Button>
         </Box>
       </Box>
@@ -126,15 +141,30 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create({
+  topimage: {
+    marginTop: 7,
+    width: 120,
+    height: 120,
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
     height: '100%',
+    justifyContent: 'center',
   },
   form: {
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  viewImage: {
+    alignSelf: 'center',
+  },
+  viewInputs: {
+    justifyContent: 'center',
+    marginBottom: 110,
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
