@@ -1,19 +1,32 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet} from 'react-native';
 
 import Layout from '@app/components/layout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {Box, Button, Input, Stack, Text} from 'native-base';
+import {AlertDialog, Box, Button, Input, Stack, Text} from 'native-base';
 import {Controller, useForm} from 'react-hook-form';
+import * as Keychain from 'react-native-keychain';
 
 type FormValues = {
   packingDiskNo: string;
 };
 
+type User = {
+  active: boolean;
+  createdAt: string;
+  employeeId: string;
+  id: string;
+  name: string;
+  role: string;
+  updatedAt: string;
+};
+
 export default function Main() {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<User | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const cancelRef = useRef(null);
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -35,10 +48,20 @@ export default function Main() {
     }
   };
 
+  const handleLogout = async () => {
+    onClose();
+    await AsyncStorage.removeItem('@user');
+    await Keychain.resetGenericPassword();
+    navigation.navigate('SignIn');
+  };
+
+  const onClose = () => setIsOpen(false);
+
   useEffect(() => {
     const getUser = async () => {
       const store: any = await AsyncStorage.getItem('@user');
-      setUser(JSON.parse(store)?.stack);
+      const userStore = JSON.parse(store)?.stack;
+      setUser(userStore);
     };
     getUser();
   }, []);
@@ -46,7 +69,7 @@ export default function Main() {
   return (
     <Layout>
       <Box style={styles.container}>
-        <Text fontSize="30" my={2} style={{textAlign: 'center'}}>
+        <Text fontSize="30" my={2}>
           TMP | Picking System
         </Text>
         <Stack
@@ -54,6 +77,12 @@ export default function Main() {
           justifyContent="space-between"
           alignItems="center">
           <Text fontSize="md">Entraste como: {user?.name}</Text>
+          <Button
+            style={styles.hiddenButton}
+            variant="ghost"
+            onPress={() => setIsOpen(true)}>
+            Cerrar sesión
+          </Button>
         </Stack>
         <Box style={styles.form}>
           <Controller
@@ -61,8 +90,8 @@ export default function Main() {
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                autoFocus={true}
                 my={3}
+                autoFocus
                 placeholder="Packing Disk No"
                 autoCapitalize="none"
                 size="lg"
@@ -91,6 +120,32 @@ export default function Main() {
           </Button>
         </Box>
       </Box>
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Mensaje</AlertDialog.Header>
+          <AlertDialog.Body>
+            ¿Está seguro que desea cerrar sesión?
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}>
+                Cancelar
+              </Button>
+              <Button colorScheme="blue" onPress={handleLogout}>
+                Cerrar sesión
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </Layout>
   );
 }
@@ -106,5 +161,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  hiddenButton: {
+    width: 0,
+    height: 0,
   },
 });

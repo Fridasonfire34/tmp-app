@@ -26,6 +26,7 @@ export default function SignIn() {
   const {
     handleSubmit,
     control,
+    reset,
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
@@ -52,6 +53,7 @@ export default function SignIn() {
           backgroundColor: 'green.600',
         });
         navigation.navigate('Main');
+        reset();
       } catch (error) {
         toast.show({
           title: 'Error',

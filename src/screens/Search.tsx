@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, RefreshControl, StyleSheet} from 'react-native';
+import {FlatList, Platform, RefreshControl, StyleSheet} from 'react-native';
 
 import {
   getSequences,
@@ -8,10 +8,22 @@ import {
 } from '@app/api/sequences';
 import Layout from '@app/components/layout';
 import {sumRestParts} from '@app/utils/sequences';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ParamListBase, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {AlertDialog, Box, Button, Input, Stack, Text, View} from 'native-base';
+import {
+  AlertDialog,
+  Box,
+  Button,
+  Input,
+  Stack,
+  Text,
+  useToast,
+  View,
+} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
 import {SkypeIndicator} from 'react-native-indicators';
+import * as Keychain from 'react-native-keychain';
 
 export default function Search() {
   const cancelDialogRef = useRef(null);
@@ -26,7 +38,44 @@ export default function Search() {
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const route = useRoute();
+  const toast = useToast();
+
   const {packing}: any = route.params;
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('@user');
+    await Keychain.resetGenericPassword();
+    navigation.navigate('SignIn');
+  };
+
+  const handleShare = async (source: any) => {
+    try {
+      const src = RNFetchBlob.fs.dirs.DownloadDir + `/report-${Date.now()}.pdf`;
+      RNFetchBlob.fs
+        .writeFile(src, source, 'base64')
+        .then(() => {
+          if (Platform.OS === 'ios') {
+            RNFetchBlob.ios.openDocument(src);
+          } else {
+            RNFetchBlob.android.actionViewIntent(src, 'application/pdf');
+          }
+          handleLogout();
+        })
+        .catch(err => {
+          console.log(err);
+          toast.show({
+            title: 'Error',
+            description: 'No se pudo compartir el reporte' + err,
+          });
+        });
+    } catch (e) {
+      console.log(e);
+      toast.show({
+        title: 'Error',
+        description: 'No se pudo compartir el reporte',
+      });
+    }
+  };
 
   const handleCreateReport = () => {
     setIsOpenDialog(false);
@@ -36,7 +85,7 @@ export default function Search() {
         const {stack} = res;
         setNumberPart('');
         setNumberRestPackings(0);
-        navigation.push('Report', {source: stack});
+        handleShare(stack);
       })
       .catch(() => {
         setError(true);
@@ -215,7 +264,7 @@ export default function Search() {
               />
               <Button
                 mt={5}
-                isDisabled={loading || error || !data.length}
+                isDisabled={loading || error}
                 onPress={handleConfirmCreateReport}>
                 Generar reporte
               </Button>
