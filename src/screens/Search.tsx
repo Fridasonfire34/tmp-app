@@ -119,18 +119,22 @@ export default function Search() {
 
   const handleRemoveFilter = () => {
     setLoading(true);
-    const id = filteredData.find((f: any) => f.partNumber === numberPart)
-      .parts[0].id;
-    postRemoveSequence(id)
-      .then(() => {
-        fetchData();
-      })
-      .catch(() => {
-        setError(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const parts = filteredData.find((f: any) => f.partNumber === numberPart);
+    if (!parts) {
+      setLoading(false);
+    } else {
+      const id = parts?.parts[0]?.id;
+      postRemoveSequence(id)
+        .then(() => {
+          fetchData();
+        })
+        .catch(() => {
+          setError(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   const handleChangeSearch = (value: string) => {
